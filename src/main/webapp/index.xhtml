@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xml:lang="en"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"/>
+    <meta name="description" content="Tasks"/>
+    <meta name="author" content="Lucas Amado"/>
+    <meta name="theme-color" content="#6d29b5"/>
+    <title>Tasks Esig</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="#{facesContext.externalContext.requestContextPath}/resources/css/style.css" rel="stylesheet"/>
+    <link href="#{facesContext.externalContext.requestContextPath}/resources/css/myreset.css" rel="stylesheet"/>
+</h:head>
+
+<h:body class="text-center">
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="https://site.esig.com.br/wp-content/themes/esigsoftware/imgs/logo-esig1.svg" width="60" height="50" alt="Logo Esig" />
+        </a>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Tarefas</a>
+            </li>
+        </ul>
+    </nav>
+    <section class="conteudo">
+        <div class="container">
+        <h:form id="form-task">
+            <div class="form-task-in">
+                <div class="form-group">
+                    <p:inputText
+                        id="taskTitleInput"
+                        styleClass="form-control changeStyle"
+                        value="#{taskControllerIndex.task.titulo}"
+                        maxlength="150"
+                        placeholder="Qual o título da demanda?"
+                        autocomplete="off"
+                        required="true"
+                    />
+                </div>
+
+                <div class="form-group changeStyle">
+                    <p:inputText
+                            id="taskDescriptionInput"
+                            styleClass="form-control changeStyle"
+                            value="#{taskControllerIndex.task.descricao}"
+                            maxlength="150"
+                            placeholder="O que precisa ser feito?"
+                            autocomplete="off"
+                            required="true"
+                    />
+                </div>
+
+                <div class="form-group changeStyle">
+                    <p:inputText
+                            id="taskResponsibleInput"
+                            styleClass="form-control changeStyle"
+                            value="#{taskControllerIndex.task.responsavel}"
+                            maxlength="150"
+                            placeholder="Quem é o responsável pela tarefa?"
+                            autocomplete="off"
+                            required="true"
+                    />
+                </div>
+
+                <div class="form-group ">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="prioridadeLabel">Prioridade</span>
+                        </div>
+                        <h:selectOneMenu
+                                value="#{taskControllerIndex.task.prioridade}"
+                                id="taskPriorityInput"
+                                styleClass="form-control changeStyle"
+                        >
+                            <f:selectItem itemValue = "baixa" itemLabel = "Baixa" />
+                            <f:selectItem itemValue = "media" itemLabel = "Média" />
+                            <f:selectItem itemValue = "alta"  itemLabel = "Alta"  />
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <p:calendar
+                            styleClass="inputDataCadastro changeStyle"
+                            id="button" value="#{taskControllerIndex.task.date}" showOn="button"
+                            placeholder="Prazo"
+                    />
+                </div>
+                <h:commandButton styleClass="btn btn-primary form-control btn-cadastrar" action="#{taskControllerIndex.create}" value="Cadastrar"/>
+
+
+            </div>
+        </h:form>
+        <div class="card card-tasks" style="clear:both">
+            <h:form id="formview">
+                <div class="input-group mb-5">
+                    <h:selectOneMenu id="filterTasks" styleClass="form-control" value = "#{taskControllerIndex.filter}">
+                        <f:selectItem itemValue = "3" itemLabel = "Todas as tarefas" />
+                        <f:selectItem itemValue = "1" itemLabel = "Em andamento" />
+                        <f:selectItem itemValue = "2" itemLabel = "Concluído" />
+                    </h:selectOneMenu>
+                    <div class="input-group-append">
+                        <p:commandLink
+                                styleClass="btn btn-outline-secondary changeStyle"
+                                id="formview"
+                                action="#{taskControllerIndex.changeFilter}"
+                                update="@form"
+                                value="Buscar"
+                        />
+                    </div>
+                </div>
+                <p:dataTable
+
+                    id="tasks"
+                    var="task"
+                    value="#{taskControllerIndex.tasks}"
+                    rowKey="#{task.id}"
+                    selection="#{taskControllerIndex.selectedTask}" selectionMode="single"
+                >
+                    <f:facet name="header" >
+                        "
+                    </f:facet>
+
+                    <p:column headerText="Título">
+                        <h:outputText styleClass="changeStyleTable" value="#{task.titulo}"/>
+                    </p:column>
+                    <p:column headerText="Descricao">
+                        <h:outputText styleClass="changeStyleTable" value="#{task.descricao}"/>
+                    </p:column>
+                    <p:column headerText="Prazo">
+                        <h:outputText styleClass="changeStyleTable" value="#{task.date}"/>
+                    </p:column>
+                    <p:column headerText="Situacao">
+                        <h:outputText styleClass="changeStyleTable" value="#{task.situacao}" />
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:contextMenu for="tasks">
+                    <p:menuitem
+                            value="Editar Tarefa"
+                            update="manage-task-content" icon="pi pi-times"
+                            oncomplete="PF('manageTaskDialog').show()"
+                    />
+                    <p:menuitem
+                            value="Alterar status"
+                            update="tasks" icon="pi pi-times"
+                            action="#{taskControllerIndex.changeSituation}"
+                    />
+                    <p:menuitem
+                        value="Remover tarefa"
+                        update="tasks" icon="pi pi-times"
+                        action="#{taskControllerIndex.delete}"
+                    />
+                </p:contextMenu>
+
+                <p:dialog header="Edição da tarefa" showEffect="fade" modal="true" widgetVar="manageTaskDialog" responsive="false">
+                    <p:outputPanel id="manage-task-content" class="ui-fluid">
+                        <p:column rendered="#{not empty taskControllerIndex.selectedTask}">
+                            <div class="form-group">
+                                <p:inputText styleClass="form-control changeStyle" id="tituloEdit" value="#{taskControllerIndex.selectedTask.titulo}" />
+                            </div>
+                            <div class="form-group">
+                                <p:inputText styleClass="form-control changeStyle" id="descricaoEdit" value="#{taskControllerIndex.selectedTask.descricao}" />
+                            </div>
+                            <div class="form-group">
+                                <p:inputText styleClass="form-control changeStyle" id="responsavelEdit" value="#{taskControllerIndex.selectedTask.responsavel}" />
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text changeStyle" id="prioridadeEditLabel">Prioridade</span>
+                                    </div>
+                                    <h:selectOneMenu
+                                            value="#{taskControllerIndex.selectedTask.prioridade}"
+                                            id="taskPriorityEdit"
+                                            styleClass="form-control changeStyle"
+                                    >
+                                        <f:selectItem itemValue = "baixa" itemLabel = "Baixa" />
+                                        <f:selectItem itemValue = "media" itemLabel = "Média" />
+                                        <f:selectItem itemValue = "alta"  itemLabel = "Alta"  />
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <p:calendar id="button" value="#{taskControllerIndex.selectedTask.date}" showOn="button"/>
+                                </div>
+                            </div>
+                        </p:column>
+                    </p:outputPanel>
+                    <p:commandLink
+                        id="save"
+                        update="tasks"
+                        action="#{taskControllerIndex.save}"
+                        value="Editar"
+                        ajax="false"
+                        styleClass="btn btn-outline-primary changeStyle"
+                    />
+                </p:dialog>
+            </h:form>
+            <small id="informacao" class="form-text text-muted">Clique com o botão direito do mouse sobre a tarefa para realizar algumas ações.</small>
+        </div>
+    </div>
+    </section>
+    <footer class="footer rodape">
+        <div class="container container-block">
+            <div class="control_line">
+                <img class="img-footer" src="https://site.esig.com.br/wp-content/themes/esigsoftware/imgs/logo-esig2.png" />
+                <p class="desc_control_line">
+                    Processo seletivo para o grupo ESIG
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+
+    };
+    </script>
+</h:body>
+</html>
