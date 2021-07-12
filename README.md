@@ -1,7 +1,5 @@
 ### Sistema de Gestão de Tarefas
 
-- Caminho para  [Branch master](https://github.com/SylarK/task_project/tree/master)
-
 #### Objetivo
 - Criar uma aplicação que seja um gerenciador de tarefas e atenda as seguintes funcionalidades: 
 
