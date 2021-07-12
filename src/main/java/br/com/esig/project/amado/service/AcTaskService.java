@@ -23,16 +23,6 @@ public class AcTaskService implements TaskService {
     }
 
     @Override
-    public List<Task> findAllWithoutIp() {
-        return taskRepository.findAll();
-    }
-
-    @Override
-    public List<Task> findAllWithIp() {
-        return null;
-    }
-
-    @Override
     public List<Task> findDone() {
         return taskRepository.findAll().stream().filter(task -> task.getSituacao().equalsIgnoreCase("concluido")).collect(Collectors.toList());
     }

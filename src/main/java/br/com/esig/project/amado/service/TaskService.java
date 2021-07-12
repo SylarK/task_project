@@ -7,8 +7,6 @@ import java.util.List;
 public interface TaskService {
 
     List<Task> findAll();
-    List<Task> findAllWithoutIp();
-    List<Task> findAllWithIp();
     List<Task> findDone();
     List<Task> findPending();
 
