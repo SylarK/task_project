@@ -24,3 +24,5 @@
 
 
 [![Watch the video](http://cdn.tecnodia.com.br/2016/10/youtube-share-send-logo-f-1200x600-1200x600.jpg)](https://www.youtube.com/watch?v=EZ7pK-gVEKA)
+
+- Clique e será redirecionado para o youtube para visualizar o vídeo.
